@@ -8,7 +8,6 @@ export default function Input(props) {
         <TextField
           id={id}
           sx={{ width: width }}
-          size="small"
           value={value}
           label={label}
           type={type}
