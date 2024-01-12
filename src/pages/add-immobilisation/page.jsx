@@ -1,28 +1,45 @@
 import React, { useState } from 'react';
 import Input from '../../components/Input'
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import styles from './page.module.css'; 
 
 const AddImmobilisation = () => {
-  const [inputValue, setInputValue] = useState('');
+    const navigate = useNavigate();
+    const [nom, setNom] = useState('');
 
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
+    const click = async () => {
+        try {
+            await axios.post('http://localhost:8080/immobilisations', {
+            nom: nom,
+            }, {
+                headers: {
+                  'Content-Type': 'application/json',
+                }
+            });
+            toast.success("Tsara be ny forin Layah")
+            navigate('/')
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Valeur du champ:', inputValue);
-  };
+        } catch (error) {
+            console.error('Erreur lors de la requête API:', error);
+        }
+    };
 
-  return (
-    <form className={styles.simpleform} onSubmit={handleSubmit}>
-      <label className={styles.formlabel}>
-        Ajouter une Immobilisation
-        </label>
-        <div className={styles.input}><Input id={"input"} label={"Ajout immobilisation"} type={"email"} variant={"outlined"} width={"300px"}  onChange={handleInputChange}/></div>
-      <button type="submit" className={styles.formboutton}>Envoyer</button>
-    </form>
+    return (
+        <div>
+            <ToastContainer/>
+            <div className={styles.simpleform} >
+                <label className={styles.formlabel}>
+                    Ajouter une Immobilisation
+                    </label>
+                    <div className={styles.input}><Input id={"input"} label={"Ajout immobilisation"} type={"text"} variant={"outlined"} width={"300px"}  onChange={(e) => setNom(e.target.value)}/></div>
+                <button type="submit" className={styles.formboutton} onClick={click}>Envoyer</button>
+            </div>
+        </div>
+
   );
 };
 
